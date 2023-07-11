@@ -1,8 +1,13 @@
 package mars.tools.socket;
 
+import mars.Globals;
+import mars.mips.hardware.AddressErrorException;
 import mars.mips.hardware.MemoryAccessNotice;
+import mars.tools.AbstractMarsToolAndApplication;
+import mars.tools.BitmapDisplay;
 import mars.tools.KeyboardAndDisplaySimulator;
 
+import javax.swing.*;
 import java.awt.event.KeyEvent;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -11,29 +16,42 @@ import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class Server {
+public class Server extends AbstractMarsToolAndApplication {
     private static final int porta=4211;
+
     private static ServerSocket serverSocket;
-    public void start() throws IOException {
+
+    /**
+     * Simple constructor
+     *
+     * @param title   String containing title bar text
+     * @param heading
+     */
+    protected Server() {
+        super("Server", "heading");
+    }
+
+    public void start() throws IOException, ClassNotFoundException {
         System.out.println("Inicio do servidor");
         serverSocket = new ServerSocket(porta);
         ConnectionWait();
     }
-    private void ConnectionWait()throws IOException{
+
+
+
+    private void ConnectionWait() throws IOException, ClassNotFoundException {
         while(true){
             Socket clientsock =serverSocket.accept();
-
             System.out.println(porta);
-            System.out.println("Your machine was connected with: "
-                    +clientsock.getRemoteSocketAddress()+"IP adress");
+            System.out.println("Your machine was connected with: " +clientsock.getRemoteSocketAddress()+"IP adress");
+            ObjectInputStream in = new ObjectInputStream(clientsock.getInputStream());
+            SocketReceive(in.readAllBytes());
         }
     }
     public void SocketReceive(byte[] b) throws IOException, ClassNotFoundException {
         ByteArrayInputStream in = new ByteArrayInputStream(b);
         ObjectInputStream objin  = new ObjectInputStream(in);
         KeyboardAndDisplaySimulator.receive = (KeyEvent) objin.readObject();
-       KeyboardAndDisplaySimulator.ref.updateMMIOControlAndData(-65536,-65532,1,65);
-        KeyboardAndDisplaySimulator.ref.updateMMIOControlAndData(-65536,-65532,1,49);
     }
     public static int getPorta() {
         return porta;
@@ -41,16 +59,28 @@ public class Server {
     public static void main(String[] args){
         try{
             Server servidor = new Server();
-            KeyboardAndDisplaySimulator.ref.updateMMIOControlAndData(-65536,-65532,1,65);
-            KeyboardAndDisplaySimulator.ref.updateMMIOControlAndData(-65536,-65532,1,49);
+//            KeyboardAndDisplaySimulator.ref.
             servidor.start();
-        }catch (IOException e){
+        }catch (ClassNotFoundException e){
             System.out.println("Error in the start Server: "+e.getMessage());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
 
     }
 
+    private synchronized void updtMMIOControlAndData(int controlAddr, int controlValue, int dataAddr, int dataValue, boolean controlOnly){
+      if(BitmapDisplay.a==1){
+          synchronized (Globals.memoryAndRegistersLock){
+              try {
+               Globals.memory.setByte(controlAddr, controlValue);
 
+              }catch (AddressErrorException aee){
+
+              }
+          }
+      }
+    }
 
 
 
@@ -87,6 +117,16 @@ public class Server {
             System.out.println(e.getMessage());
 
         }
+    }
+
+    @Override
+    public String getName() {
+        return null;
+    }
+
+    @Override
+    protected JComponent buildMainDisplayArea() {
+        return null;
     }
 }
 

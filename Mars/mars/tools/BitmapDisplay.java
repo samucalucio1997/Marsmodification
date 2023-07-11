@@ -272,13 +272,13 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
                });		
          return help;  
       }
-
+      public static int a=0;
        protected static JComponent GetConnectP2P() {
            JButton con = new JButton("ConnectP2P");
            con.addActionListener(new ActionListener() {
                public void actionPerformed(ActionEvent e) {
                    /*Open the pane for choose who will be the server machine or client machine*/
-                   int a=JOptionPane.showConfirmDialog(new JButton("Cliente"), "Cliente");
+                   a=JOptionPane.showConfirmDialog(new JButton("Cliente"), "Cliente");
                    String k="000.000.000";
                    if(a==0) {
                        k=JOptionPane.showInputDialog("Ip Server");

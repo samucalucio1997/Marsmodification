@@ -89,7 +89,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
       private boolean multiFileAssemble = false;
    	
       // Structure required for MarsTool use only (not stand-alone use). Want subclasses to have access.
-      protected ConnectButton connectButton;      
+      protected ConnectButton  connectButton;
    
    
       /**

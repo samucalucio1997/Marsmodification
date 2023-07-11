@@ -711,11 +711,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
    
    	 /////////////////////////////////////////////////////////////////////
        // update the MMIO Control and Data register pair -- 2 memory cells. We will delegate.
-      public void updateMMIOControlAndData(int controlAddr, int controlValue, int dataAddr, int dataValue) {
-          System.out.println(controlAddr);
-          System.out.println(controlValue);
-          System.out.println(dataAddr);
-          System.out.println(dataValue);
+     private void updateMMIOControlAndData(int controlAddr, int controlValue, int dataAddr, int dataValue) {
           updateMMIOControlAndData(controlAddr, controlValue, dataAddr, dataValue, false);
       }
 
@@ -729,6 +725,8 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
             synchronized (Globals.memoryAndRegistersLock) {
                try {
                   Globals.memory.setRawWord(controlAddr, controlValue);
+//                   System.out.println(controlAddr);
+//                   System.out.println(controlValue);
                   if (!controlOnly) Globals.memory.setRawWord(dataAddr, dataValue);
                }
                   catch (AddressErrorException aee) {
@@ -825,11 +823,11 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
       private class KeyboardKeyListener implements KeyListener {
          public void keyTyped(KeyEvent e) {// Esse método, só irá servir para pegarmos o objeto KeyEvent desta máquina
             int updatedReceiverControl = readyBitSet(RECEIVER_CONTROL);
-             System.out.println(e.getKeyChar());
-             System.out.println(RECEIVER_DATA);
-             System.out.println(RECEIVER_CONTROL);
-             System.out.println(updatedReceiverControl);
-             System.out.println(e.getKeyChar() & 0x00000ff);
+//             System.out.println(e.getKeyChar());
+//             System.out.println(RECEIVER_DATA);
+//             System.out.println(RECEIVER_CONTROL);
+//             System.out.println(updatedReceiverControl);
+//             System.out.println(e.getKeyChar() & 0x00000ff);
             updateMMIOControlAndData(RECEIVER_CONTROL, updatedReceiverControl, RECEIVER_DATA,  e.getKeyChar() & 0x00000ff);
             KeyboardAndDisplaySimulator.sender=e;
             if (updatedReceiverControl != 1

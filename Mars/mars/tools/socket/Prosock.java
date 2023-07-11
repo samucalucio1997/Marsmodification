@@ -26,20 +26,18 @@ public class Prosock extends Thread{
 
     public void Start() throws IOException {
         socket = new Socket(IPServer,Server.getPorta());
-        PrepareSender();
+        PrepareSenderLoop();
         //System.out.println(IPServer);
     }
 
-    public void PrepareSender() throws IOException {
-        while(true){
-        if(KeyboardAndDisplaySimulator.sender!=null){
+    private void PrepareSenderLoop() throws IOException {
+        while(KeyboardAndDisplaySimulator.sender!=null){
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         ObjectOutputStream objout = new ObjectOutputStream(out);
         objout.writeObject(KeyboardAndDisplaySimulator.sender);
         KeyboardAndDisplaySimulator.sender = null;
         objout.flush();
         objout.reset();
-        }
         }
     }
 
