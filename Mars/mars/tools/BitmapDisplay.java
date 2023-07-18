@@ -68,13 +68,13 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
    	// Values for Combo Boxes
    	
       private final String[] visualizationUnitPixelWidthChoices  = {"1","2","4","8","16","32"};
-      private final int defaultVisualizationUnitPixelWidthIndex  = 0;
+      private final int defaultVisualizationUnitPixelWidthIndex  = 2;
       private final String[] visualizationUnitPixelHeightChoices  = {"1","2","4","8","16","32"};
-      private final int defaultVisualizationUnitPixelHeightIndex  = 0;
+      private final int defaultVisualizationUnitPixelHeightIndex  = 2;
       private final String[] displayAreaPixelWidthChoices  = {"64","128","256","512","1024"};
       private final int defaultDisplayWidthIndex  = 3;
       private final String[] displayAreaPixelHeightChoices  = {"64","128","256","512","1024"};
-      private final int defaultDisplayHeightIndex  = 2;
+      private final int defaultDisplayHeightIndex  = 3;
    
       // Values for display canvas.  Note their initialization uses the identifiers just above.
    
@@ -185,6 +185,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
          if (accessNotice.getAccessType() == AccessNotice.WRITE) {
              this.retorno_socket = accessNotice;
             updateColorForAddress((MemoryAccessNotice)accessNotice);
+            System.out.println("Passou legal");
          }
          return accessNotice;
       }
@@ -504,6 +505,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
          int address = notice.getAddress();
          int value   = notice.getValue();
          int offset = (address - baseAddress)/Memory.WORD_LENGTH_BYTES;
+         System.out.println("passou aqui");
          try {
             theGrid.setElement(offset / theGrid.getColumns(), offset % theGrid.getColumns(), value);
          } 

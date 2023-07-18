@@ -711,7 +711,11 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
    
    	 /////////////////////////////////////////////////////////////////////
        // update the MMIO Control and Data register pair -- 2 memory cells. We will delegate.
-     private void updateMMIOControlAndData(int controlAddr, int controlValue, int dataAddr, int dataValue) {
+     public void updateMMIOControlAndData(int controlAddr, int controlValue, int dataAddr, int dataValue) {
+            System.out.println(RECEIVER_DATA);
+            System.out.println(RECEIVER_CONTROL);
+            System.out.println(controlValue);
+            System.out.println(dataValue);
           updateMMIOControlAndData(controlAddr, controlValue, dataAddr, dataValue, false);
       }
 
@@ -723,24 +727,20 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
       private synchronized void updateMMIOControlAndData(int controlAddr, int controlValue, int dataAddr, int dataValue, boolean controlOnly) {
          if (!this.isBeingUsedAsAMarsTool || (this.isBeingUsedAsAMarsTool && connectButton.isConnected())) {
             synchronized (Globals.memoryAndRegistersLock) {
-               try {
-                  Globals.memory.setRawWord(controlAddr, controlValue);
-//                   System.out.println(controlAddr);
-//                   System.out.println(controlValue);
+                try {
+                    Globals.memory.setRawWord(controlAddr, controlValue);
                   if (!controlOnly) Globals.memory.setRawWord(dataAddr, dataValue);
-               }
-                  catch (AddressErrorException aee) {
-                     System.out.println("Tool author specified incorrect MMIO address!"+aee);
-                     System.exit(0);
-                  }
+                } catch (AddressErrorException e) {
+                    throw new RuntimeException(e);
+                }
             }
          	// HERE'S A HACK!!  Want to immediately display the updated memory value in MARS
          	// but that code was not written for event-driven update (e.g. Observer) --
          	// it was written to poll the memory cells for their values.  So we force it to do so.
          
-            if (Globals.getGui() != null && Globals.getGui().getMainPane().getExecutePane().getTextSegmentWindow().getCodeHighlighting() ) {
-               Globals.getGui().getMainPane().getExecutePane().getDataSegmentWindow().updateValues();
-            }
+           if (Globals.getGui() != null && Globals.getGui().getMainPane().getExecutePane().getTextSegmentWindow().getCodeHighlighting() ) {
+              Globals.getGui().getMainPane().getExecutePane().getDataSegmentWindow().updateValues();
+           }
          }
       }
    
@@ -823,11 +823,11 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
       private class KeyboardKeyListener implements KeyListener {
          public void keyTyped(KeyEvent e) {// Esse método, só irá servir para pegarmos o objeto KeyEvent desta máquina
             int updatedReceiverControl = readyBitSet(RECEIVER_CONTROL);
-//             System.out.println(e.getKeyChar());
-//             System.out.println(RECEIVER_DATA);
-//             System.out.println(RECEIVER_CONTROL);
-//             System.out.println(updatedReceiverControl);
-//             System.out.println(e.getKeyChar() & 0x00000ff);
+            // System.out.println(e.getKeyChar());
+            // System.out.println(RECEIVER_DATA);
+            // System.out.println(RECEIVER_CONTROL);
+            // System.out.println(updatedReceiverControl);
+            // System.out.println(e.getKeyChar() & 0x00000ff);
             updateMMIOControlAndData(RECEIVER_CONTROL, updatedReceiverControl, RECEIVER_DATA,  e.getKeyChar() & 0x00000ff);
             KeyboardAndDisplaySimulator.sender=e;
             if (updatedReceiverControl != 1

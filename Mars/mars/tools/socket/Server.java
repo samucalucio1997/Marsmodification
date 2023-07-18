@@ -57,45 +57,37 @@ public class Server extends AbstractMarsToolAndApplication {
         return porta;
     }
     public static void main(String[] args){
-        try{
-            Server servidor = new Server();
-//            KeyboardAndDisplaySimulator.ref.
-            servidor.start();
-        }catch (ClassNotFoundException e){
-            System.out.println("Error in the start Server: "+e.getMessage());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        Server servidor = new Server();
+        servidor.Test();
+        // try{
+        //     servidor.start();
+        // }catch (ClassNotFoundException e){
+        //     System.out.println("Error in the start Server: "+e.getMessage());
+        // } catch (IOException e) {
+        //     throw new RuntimeException(e);
+        // }
 
     }
+    public void Test(){
+        for(int i=268501184;i<268564384;i+=4){
+                updtData(i,0,4);
+                System.out.println("going on");
+            }
+    }
 
-    private synchronized void updtMMIOControlAndData(int controlAddr, int controlValue, int dataAddr, int dataValue, boolean controlOnly){
-      if(BitmapDisplay.a==1){
+    private synchronized void updtData(int adress,int Value,int length){
+      if(true){
           synchronized (Globals.memoryAndRegistersLock){
               try {
-               Globals.memory.setByte(controlAddr, controlValue);
-
-              }catch (AddressErrorException aee){
-
-              }
+                Globals.memory.set(adress, Value, length);
+            } catch (AddressErrorException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
           }
       }
+       
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     public static void run() {
         try {

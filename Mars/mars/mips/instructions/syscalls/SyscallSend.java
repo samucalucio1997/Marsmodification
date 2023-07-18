@@ -8,6 +8,6 @@ public class SyscallSend extends AbstractSyscall{
 
     @Override
     public void simulate(ProgramStatement statement) throws ProcessingException {
-
+//        Globals.
     }
 }

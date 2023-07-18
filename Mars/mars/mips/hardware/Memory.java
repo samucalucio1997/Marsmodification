@@ -74,6 +74,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
       public static int kernelDataBaseAddress = MemoryConfigurations.getDefaultKernelDataBaseAddress(); //0x90000000;
     /** starting address for memory mapped I/O: 0xffff0000 (-65536) **/
       public static int memoryMapBaseAddress = MemoryConfigurations.getDefaultMemoryMapBaseAddress(); //0xffff0000;
+      // public static int memorySocket = MemoryConfigurations.
     /** highest address acessible in kernel mode. **/
       public static int kernelHighAddress = MemoryConfigurations.getDefaultKernelHighAddress(); //0xffffffff;
    
@@ -356,6 +357,8 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
     
    // Allocates blocks if necessary.
        public int set(int address, int value, int length) throws AddressErrorException {
+         // System.out.println(address);
+         // System.out.println(length);
          int oldValue = 0;
          if (Globals.debug) System.out.println("memory["+address+"] set to "+value+"("+length+" bytes)");
          int relativeByteAddress;

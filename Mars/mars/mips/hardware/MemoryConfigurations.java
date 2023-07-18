@@ -98,8 +98,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
          0x8ffffffc, // kernel text limit address
          0x10040000, // stack limit address
          0xffffffff,  // memory map limit address
-         0xeeeeee0,   //memory for send the socket value
-         0xeeeeee4   //memory for receive the socket value
+         0xeeeeee0   //memory for send the socket value
          };
    
       // Compact allows 16 bit addressing, data segment starts at 0
@@ -289,6 +288,8 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
    
        public static int getDefaultMemoryMapBaseAddress() {
          return defaultConfigurationItemValues[13];
+      }
+      public static int getDefaultMemorySenderAddress(){ return defaultConfigurationItemValues[0];
       }
    
        public static int getDefaultKernelHighAddress () {
