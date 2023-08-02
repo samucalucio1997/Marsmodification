@@ -3,6 +3,7 @@ package mars.tools.socket;
 import mars.Globals;
 import mars.mips.hardware.AddressErrorException;
 import mars.mips.hardware.MemoryAccessNotice;
+import mars.mips.hardware.RegisterFile;
 import mars.tools.AbstractMarsToolAndApplication;
 import mars.tools.BitmapDisplay;
 import mars.tools.KeyboardAndDisplaySimulator;
@@ -70,7 +71,9 @@ public class Server extends AbstractMarsToolAndApplication {
     }
     public void Test(){
         for(int i=268501184;i<268564384;i+=4){
-                updtData(i,0,4);
+                updtData(i,1800775,4);
+                // new BitmapDisplay().updateColorForAddress(new MemoryAccessNotice(i, i, 1800775));
+                RegisterFile.updateRegister(i, i);
                 System.out.println("going on");
             }
     }
