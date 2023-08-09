@@ -1,14 +1,5 @@
 package mars.tools.socket;
 
-import mars.Globals;
-import mars.mips.hardware.AddressErrorException;
-import mars.mips.hardware.MemoryAccessNotice;
-import mars.mips.hardware.RegisterFile;
-import mars.tools.AbstractMarsToolAndApplication;
-import mars.tools.BitmapDisplay;
-import mars.tools.KeyboardAndDisplaySimulator;
-
-import javax.swing.*;
 import java.awt.event.KeyEvent;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -17,10 +8,46 @@ import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import javax.swing.JComponent;
+
+import mars.Globals;
+import mars.mips.hardware.AddressErrorException;
+import mars.mips.hardware.MemoryAccessNotice;
+import mars.mips.hardware.RegisterFile;
+import mars.tools.AbstractMarsToolAndApplication;
+import mars.tools.BitmapDisplay;
+import mars.tools.KeyboardAndDisplaySimulator;
+
 public class Server extends AbstractMarsToolAndApplication {
     private static final int porta=4211;
-
+    
     private static ServerSocket serverSocket;
+    private static Server servidor = new Server();
+    
+    private int mapi;
+
+    public static Server getServer(){
+        return servidor;
+    }
+
+    public int getMapi() {
+        return mapi;
+    }
+
+    public void setMapi(int mapi) {
+        this.mapi = mapi;
+    }
+
+    public int getMapf() {
+        return mapf;
+    }
+
+    public void setMapf(int mapf) {
+        this.mapf = mapf;
+    }
+
+    private int mapf;
+
 
     /**
      * Simple constructor
@@ -57,8 +84,12 @@ public class Server extends AbstractMarsToolAndApplication {
     public static int getPorta() {
         return porta;
     }
+
+    
+
+
+
     public static void main(String[] args){
-        Server servidor = new Server();
         servidor.Test();
         // try{
         //     servidor.start();
@@ -67,19 +98,18 @@ public class Server extends AbstractMarsToolAndApplication {
         // } catch (IOException e) {
         //     throw new RuntimeException(e);
         // }
-
     }
+
     public void Test(){
         for(int i=268501184;i<268564384;i+=4){
                 updtData(i,1800775,4);
-                // new BitmapDisplay().updateColorForAddress(new MemoryAccessNotice(i, i, 1800775));
-                RegisterFile.updateRegister(i, i);
+                setMapi(i); 
                 System.out.println("going on");
             }
+            setMapf(268564384);
     }
 
     private synchronized void updtData(int adress,int Value,int length){
-      if(true){
           synchronized (Globals.memoryAndRegistersLock){
               try {
                 Globals.memory.set(adress, Value, length);
@@ -88,7 +118,7 @@ public class Server extends AbstractMarsToolAndApplication {
                 e.printStackTrace();
             }
           }
-      }
+      
        
     }
 

@@ -56,13 +56,7 @@ public class Prosock extends Thread{
     }
 
 
-
-
-
-
-
-
-
+    
 
 
     public void GetConnection(String IPserver) {

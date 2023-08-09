@@ -1,17 +1,28 @@
 package mars.tools;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Observable;
+
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+
 import mars.mips.hardware.AccessNotice;
 import mars.mips.hardware.Memory;
 import mars.mips.hardware.MemoryAccessNotice;
 import mars.tools.socket.Prosock;
 import mars.tools.socket.Server;
-
-import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.Observable;
 
 /*
 Copyright (c) 2010-2011,  Pete Sanderson and Kenneth Vollmar
@@ -129,6 +140,10 @@ public class BitmapDisplay extends AbstractMarsToolAndApplication {
       claBit.go();
    }
 
+   public BitmapDisplay geBitmapDisplay(){
+      return claBit;
+   }
+
    /**
     * Required MarsTool method to return Tool name.
     * 
@@ -203,7 +218,6 @@ public class BitmapDisplay extends AbstractMarsToolAndApplication {
       if (accessNotice.getAccessType() == AccessNotice.WRITE) {
          this.retorno_socket = accessNotice;
          updateColorForAddress((MemoryAccessNotice) accessNotice);
-         System.out.println("Passou legal");
       }
       return accessNotice;
    }
@@ -255,6 +269,11 @@ public class BitmapDisplay extends AbstractMarsToolAndApplication {
     */
    protected void updateDisplay() {
       canvas.repaint();
+   }
+   
+   public void updateDisplay(int x,int y){
+      upcolor(x, y); 
+      updateDisplay();
    }
 
    /**
@@ -507,6 +526,21 @@ public class BitmapDisplay extends AbstractMarsToolAndApplication {
       theGrid.reset();
    }
 
+   private synchronized void socketMapping(int x,int y){
+        synchronized(Server.getServer()){
+          try{
+
+          }catch(Exception e){
+
+          }
+        }
+   }
+   
+   private void upcolor(int x, int y){ //will receiver the begin and final points for mapping
+        
+      theGrid.updateTheGrid(x,y);
+   }
+
    // Will return int equivalent of specified combo box's current selection.
    // The selection must be a String that parses to an int.
    private int getIntComboBoxSelection(JComboBox comboBox) {
@@ -538,7 +572,7 @@ public class BitmapDisplay extends AbstractMarsToolAndApplication {
       int address = notice.getAddress();
       int value = notice.getValue();
       int offset = (address - baseAddress) / Memory.WORD_LENGTH_BYTES;
-      // System.out.println("passou aqui");
+      System.out.println("passou aqui");
       try {
          theGrid.setElement(offset / theGrid.getColumns(), offset % theGrid.getColumns(), value);
       } catch (IndexOutOfBoundsException e) {
@@ -622,6 +656,14 @@ public class BitmapDisplay extends AbstractMarsToolAndApplication {
       // Set the grid element.
       private void setElement(int row, int column, Color color) {
          grid[row][column] = color;
+      }
+
+      private void updateTheGrid(int x,int y){
+            for(int i=x;i<rows;i++){
+               for(int j=y;j<columns;j++){
+                   setElement(i, j, 1800775);
+               }
+            }         
       }
 
       // Just set all grid elements to black.
