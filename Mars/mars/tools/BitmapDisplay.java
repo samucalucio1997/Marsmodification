@@ -65,7 +65,7 @@ public class BitmapDisplay extends AbstractMarsToolAndApplication {
 
    private static String version = "Version 1.0";
    private static String heading = "Bitmap Display";
-   public static BitmapDisplay claBit;
+   public static BitmapDisplay claBit = new BitmapDisplay();
 
    // Major GUI components
    private JComboBox visualizationUnitPixelWidthSelector, visualizationUnitPixelHeightSelector,
@@ -136,13 +136,10 @@ public class BitmapDisplay extends AbstractMarsToolAndApplication {
     * is no driver program to invoke the application.
     */
    public static void main(String[] args) {
-      claBit = new BitmapDisplay("Bitmap Display stand-alone, " + version, heading);
-      claBit.go();
+       new BitmapDisplay("Bitmap Display stand-alone, " + version, heading).go(); 
    }
 
-   public BitmapDisplay geBitmapDisplay(){
-      return claBit;
-   }
+   
 
    /**
     * Required MarsTool method to return Tool name.
@@ -267,7 +264,7 @@ public class BitmapDisplay extends AbstractMarsToolAndApplication {
     * Mars
     * is running in timed mode. Overrides inherited method that does nothing.
     */
-   protected void updateDisplay() {
+   public void updateDisplay() {
       canvas.repaint();
    }
    
@@ -314,7 +311,7 @@ public class BitmapDisplay extends AbstractMarsToolAndApplication {
 
    public static int a = 0;
 
-   protected static JComponent GetConnectP2P() {
+   protected JComponent GetConnectP2P() {
       JButton con = new JButton("ConnectP2P");
       con.addActionListener(new ActionListener() {
          public void actionPerformed(ActionEvent e) {
@@ -324,9 +321,15 @@ public class BitmapDisplay extends AbstractMarsToolAndApplication {
             if (a == 0) {
                k = JOptionPane.showInputDialog("Ip Server");
                Prosock.main(new String[] {});
+               // theGrid = createNewGrid();
+               updateDisplay();
             } else {
+               // theGrid = createNewGrid();
                Server.main(new String[] {});
-               /* Open the server to hear some door */
+               /* Open the server to hear some door */  
+               updateBaseAddress();
+               System.out.println("passou aqui");
+               updateDisplay();
             }
          }
       });
@@ -421,8 +424,8 @@ public class BitmapDisplay extends AbstractMarsToolAndApplication {
                   if (connectButton != null && connectButton.isConnected()) {
                      deleteAsObserver();
                      addAsObserver();
+                     theGrid = createNewGrid();
                   }
-                  theGrid = createNewGrid();
                   updateDisplay();
                }
             });
@@ -526,18 +529,8 @@ public class BitmapDisplay extends AbstractMarsToolAndApplication {
       theGrid.reset();
    }
 
-   private synchronized void socketMapping(int x,int y){
-        synchronized(Server.getServer()){
-          try{
-
-          }catch(Exception e){
-
-          }
-        }
-   }
    
    private void upcolor(int x, int y){ //will receiver the begin and final points for mapping
-        
       theGrid.updateTheGrid(x,y);
    }
 
@@ -561,18 +554,20 @@ public class BitmapDisplay extends AbstractMarsToolAndApplication {
 
    // Method to determine grid dimensions based on current control settings.
    // Each grid element corresponds to one visualization unit.
-   private Grid createNewGrid() {
+   public Grid createNewGrid() {
       int rows = displayAreaHeightInPixels / unitPixelHeight;
       int columns = displayAreaWidthInPixels / unitPixelWidth;
       return new Grid(rows, columns);
    }
+
+   
 
    // Given memory address, update color for the corresponding grid element.
    public void updateColorForAddress(MemoryAccessNotice notice) {
       int address = notice.getAddress();
       int value = notice.getValue();
       int offset = (address - baseAddress) / Memory.WORD_LENGTH_BYTES;
-      System.out.println("passou aqui");
+      // System.out.println("passou aqui");
       try {
          theGrid.setElement(offset / theGrid.getColumns(), offset % theGrid.getColumns(), value);
       } catch (IndexOutOfBoundsException e) {

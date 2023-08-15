@@ -102,19 +102,18 @@ public class Server extends AbstractMarsToolAndApplication {
 
     public void Test(){
         for(int i=268501184;i<268564384;i+=4){
-                updtData(i,1800775,4);
-                setMapi(i); 
-                System.out.println("going on");
-            }
+                updtData(i,1800775);
+                setMapi(i);
+             }
             setMapf(268564384);
     }
 
-    private synchronized void updtData(int adress,int Value,int length){
+
+    private synchronized void updtData(int adress,int Value){
           synchronized (Globals.memoryAndRegistersLock){
               try {
-                Globals.memory.set(adress, Value, length);
+                    Globals.memory.setWord(adress, Value);
             } catch (AddressErrorException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
           }

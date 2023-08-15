@@ -357,8 +357,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
     
    // Allocates blocks if necessary.
        public int set(int address, int value, int length) throws AddressErrorException {
-         // System.out.println(address);
-         // System.out.println(length);
+
          int oldValue = 0;
          if (Globals.debug) System.out.println("memory["+address+"] set to "+value+"("+length+" bytes)");
          int relativeByteAddress;

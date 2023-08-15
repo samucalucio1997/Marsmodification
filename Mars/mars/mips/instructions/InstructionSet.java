@@ -585,6 +585,7 @@ public class InstructionSet {
                         int[] operands = statement.getOperands();
                         try {
                            RegisterFile.updateRegister(operands[0],Globals.memory.getWord(RegisterFile.getValue(operands[2]) + operands[1]));
+                           
                         } catch (AddressErrorException e) {
                            throw new ProcessingException(statement, e);
                         }
